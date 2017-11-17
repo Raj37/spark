@@ -1,2 +1,3 @@
 https://www.linkedin.com/pulse/repartition-vs-coalesce-apache-spark-bhanuvardhan-nune/ (Repartition VS Coalesce)
 http://data-informed.com/tuning-apache-spark-jobs-the-easy-way-web-ui-stage-detail-view/ (Spark Web UI)
+https://github.com/databricks/spark-knowledgebase/blob/master/performance_optimization/how_many_partitions_does_an_rdd_have.md (Cache/Storage)
