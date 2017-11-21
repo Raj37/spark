@@ -1,0 +1,6 @@
+001,it,pune
+002,comp,pune
+003,mech,delhi
+004,comp,mum
+005,mech,pune
+006,inst,agra
