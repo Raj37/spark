@@ -1,0 +1,107 @@
+
+1- read 2 files in  2 RDD
+2- see count and file contents
+3- remove duplicate on emp for "Id" and filter on dept for "pune"
+4- join 1-2 and display requried(id,sal,city,dept) columns
+5- Apply group by on "city" and found max sal
+
+emp -id,name,sal
+dept- id,dept,loc
+
+val empData = sc.textFile("file:///home/cloudera/Desktop/emp.txt")
+
+case class emp(id:Inr,name:String,sal:Int)
+
+val e1 = empData.map(x=>x.split(","))
+
+val e2 = e1.map(x=>emp(x(0).toInt,x(1).trim,x(2).toInt))
+
+val e3 = e2.map(x=>(x.id,(x.name,x.sal)))
+
+val e4 = e2.map(x=>(x.id,x.sal))
+
+val deptData = sc.textFile("file:///home/cloudera/Desktop/dept.txt")
+
+case class dept(id:Int,dept:String,loc:String)
+
+val d1 = deptData.map(x=>x.split(","))
+
+val d2 = d1.map(x=>dept(x(0).toInt,x(1).trim,x(2).trim))
+
+val d3 = d2.map(x=>(x.id,(x.dept,x.loc)))
+
+val d4 = d2.map(x=>(x.id,(x.loc,x.dept)))
+
+val joinData = e4.join(d4)
+
+val flatData = joinData.map{case (x,(y,(z,w)))=>(x,y,z,w)}
+
+flatData.foreach(println)
+(4,400,mum,comp)
+(1,500,pune,it)
+(6,35000,agra,inst)
+(3,900,delhi,mech)
+(5,900,pune,mech)
+(5,900,pune,mech)
+(2,700,pune,comp)
+
+val grpData = flatData.groupBy(x=>x._3)
+
+(mum,CompactBuffer((4,400,mum,comp)))
+(delhi,CompactBuffer((3,900,delhi,mech)))
+(pune,CompactBuffer((1,500,pune,it), (5,900,pune,mech), (5,900,pune,mech), (2,700,pune,comp)))
+(agra,CompactBuffer((6,35000,agra,inst)))
+
+val ftrdData= grpData.map(x=>x._2).map(_.maxBy(_._2)).foreach(println)
+(4,400,mum,comp)
+(3,900,delhi,mech)
+(5,900,pune,mech)
+(6,35000,agra,inst)
+
+val flatData = joinData.map{case (x,(y,(z,w)))=>(x,y,z,w)}
+
+flatData.distinct().filter(_._3.contains("pune")).foreach(println)
+(5,900,pune,mech)
+(1,500,pune,it)
+(2,700,pune,comp)
+
+e3.map{case (x,(y,z))=>(x,y,z)}.distinct.foreach(println)
+(7,rade,950)
+(2,raj,700)
+(5,ravi,900)
+(1,abhishek,500)
+(4,ruby,400)
+(8,situ,900)
+(6,jain,35000)
+(3,kapil,900)
+
+d3.map{case(x,(y,z))=>(x,y,z)}.filter(_._3.contains("pune")).foreach(println)
+(1,it,pune)
+(2,comp,pune)
+(5,mech,pune)
+
+e3.count
+res45: Long = 9
+
+e3.foreach(println)
+(1,(abhishek,500))
+(2,(raj,700))
+(3,(kapil,900))
+(4,(ruby,400))
+(5,(ravi,900))
+(5,(ravi,900))
+(6,(jain,35000))
+(7,(rade,950))
+(8,(situ,900))
+
+
+d3.count
+res48: Long = 6
+
+d3.foreach(println)
+(1,(it,pune))
+(2,(comp,pune))
+(3,(mech,delhi))
+(4,(comp,mum))
+(5,(mech,pune))
+(6,(inst,agra))
